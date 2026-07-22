@@ -1,0 +1,80 @@
+name: Tarea tecnica SDD/Scrum
+description: Registrar una tarea F5 vinculada a historia, requisito, criterio, Sprint, evidencia y responsable.
+title: "[TASK]: "
+labels:
+  - task
+  - sdd
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use este formulario para tareas implementables del Sprint Backlog F5. Cada tarea debe enlazar HU, RF y CA.
+  - type: input
+    id: tarea
+    attributes:
+      label: Tarea F5
+      description: ID y descripcion breve de la tarea.
+      placeholder: "TASK-001 - Implementar validacion de requisitos obligatorios."
+    validations:
+      required: true
+  - type: input
+    id: historia
+    attributes:
+      label: Historia relacionada
+      description: Historia de usuario o funcionalidad que justifica la tarea.
+      placeholder: "HU-001"
+    validations:
+      required: true
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito relacionado
+      description: RF, RNF o regla que cubre la tarea.
+      placeholder: "RF-001"
+    validations:
+      required: true
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Criterio de aceptacion
+      description: Criterio que debe quedar satisfecho al cerrar la tarea.
+      placeholder: "CA-001 - Dado..., cuando..., entonces..."
+    validations:
+      required: true
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint
+      description: Sprint FICCT donde se ejecutara la tarea.
+      placeholder: "Sprint-1"
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia_esperada
+    attributes:
+      label: Evidencia esperada
+      description: Comandos, pruebas, capturas, commits o rutas de evidencia requeridas.
+      placeholder: "python -m pytest; docs/evidencias/sprint-1/TASK-001.png"
+    validations:
+      required: true
+  - type: input
+    id: responsable
+    attributes:
+      label: Responsable
+      description: Integrante que ejecutara o coordinara la tarea.
+      placeholder: "@usuario-github o Nombre Apellido"
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo_tarea
+    attributes:
+      label: Tipo de tarea
+      description: Clasifique el trabajo principal.
+      options:
+        - Implementacion
+        - Prueba
+        - Documentacion
+        - Validacion SDD
+        - Correccion
+    validations:
+      required: true

@@ -1,0 +1,68 @@
+name: Historia o funcionalidad SDD/Scrum
+description: Registrar una historia de usuario o funcionalidad trazable a requisitos, criterios y evidencia.
+title: "[HU/RF]: "
+labels:
+  - feature
+  - user-story
+  - sdd
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Complete este formulario antes de iniciar implementacion. Use IDs estables como HU-001, RF-001, CA-001 y Sprint-1.
+  - type: input
+    id: historia
+    attributes:
+      label: Historia de usuario
+      description: Indique el ID y la historia en formato Como/Quiero/Para.
+      placeholder: "HU-001 - Como estudiante, quiero registrar requisitos para mantener trazabilidad SDD."
+    validations:
+      required: true
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito relacionado
+      description: RF, RNF o regla de negocio que cubre esta historia.
+      placeholder: "RF-001"
+    validations:
+      required: true
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Criterio de aceptacion
+      description: Criterio verificable asociado a la historia y al requisito.
+      placeholder: "CA-001 - Dado..., cuando..., entonces..."
+    validations:
+      required: true
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint
+      description: Sprint FICCT donde se planifica la historia o funcionalidad.
+      placeholder: "Sprint-1"
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia_esperada
+    attributes:
+      label: Evidencia esperada
+      description: Capturas, pruebas, reporte, demo o archivo que demostrara el criterio.
+      placeholder: "docs/evidencias/sprint-1/HU-001-demo.png; npm test; reporte SDD actualizado."
+    validations:
+      required: true
+  - type: input
+    id: responsable
+    attributes:
+      label: Responsable
+      description: Integrante responsable de coordinar la entrega.
+      placeholder: "@usuario-github o Nombre Apellido"
+    validations:
+      required: true
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas de alcance
+      description: Riesgos, dependencias o restricciones relevantes para el Sprint.
+      placeholder: "Depende de TASK-001 y actualizacion de matriz de trazabilidad."
+    validations:
+      required: false

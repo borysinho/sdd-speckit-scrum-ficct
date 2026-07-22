@@ -1,0 +1,10 @@
+name: SDD Gate
+
+"on":
+  pull_request:
+
+jobs:
+  sdd-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "ok"

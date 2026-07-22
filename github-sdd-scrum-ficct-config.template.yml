@@ -1,0 +1,63 @@
+faculty: "FICCT"
+degree: ""
+course: ""
+subject: ""
+project_name: ""
+
+scrum:
+  framework: "scrum-ficct"
+  sprint_prefix: "sprint"
+  sprint_length_days: 7
+  required_artifacts:
+    f1_sprint_review: true
+    f2_retrospective: true
+    f3_product_backlog: true
+    f4_user_stories: true
+    f5_sprint_backlog: true
+  labels:
+    feature: "feature"
+    user_story: "user-story"
+    task: "task"
+    evidence: "evidence"
+    sprint: "sprint"
+
+github:
+  assets:
+    issue_forms: true
+    pull_request_template: true
+    actions_workflow: true
+  issue_forms:
+    feature: ".github/ISSUE_TEMPLATE/feature.yml"
+    task: ".github/ISSUE_TEMPLATE/task.yml"
+    evidence: ".github/ISSUE_TEMPLATE/evidence.yml"
+  pull_request_template: ".github/pull_request_template.md"
+  workflow: ".github/workflows/sdd-gate.yml"
+  require_issue_reference_in_pr: true
+  require_sdd_checklist_in_pr: true
+
+validation:
+  strict: true
+  require_spec: true
+  require_plan: true
+  require_tasks: true
+  require_acceptance_criteria: true
+  require_traceability_matrix: true
+  require_github_issue_reference: true
+  require_pr_evidence: true
+  require_tests: true
+  fail_on_missing_scrum_artifacts: true
+  fail_on_missing_github_assets: true
+
+paths:
+  specs: "specs"
+  scrum_docs: "docs/scrum"
+  sdd_docs: "docs/sdd"
+  evidence: "docs/evidencias"
+  reports: "docs/evidencias"
+
+report:
+  output: "docs/evidencias/sdd-compliance-report.md"
+  include_summary: true
+  include_missing_items: true
+  include_github_assets_status: true
+  include_scrum_artifacts_status: true

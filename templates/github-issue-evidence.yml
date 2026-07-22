@@ -1,0 +1,80 @@
+name: Evidencia o validacion SDD
+description: Registrar evidencia, validacion, bloqueo o hallazgo asociado a historia, requisito y Sprint.
+title: "[EVIDENCIA]: "
+labels:
+  - evidence
+  - sdd
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use este formulario para dejar evidencia verificable de pruebas, capturas, demo, validacion docente o bloqueos del Sprint.
+  - type: dropdown
+    id: tipo_evidencia
+    attributes:
+      label: Tipo de evidencia
+      description: Seleccione el tipo principal de registro.
+      options:
+        - Prueba ejecutada
+        - Captura o demo
+        - Reporte SDD
+        - Validacion docente
+        - Bloqueo o riesgo
+    validations:
+      required: true
+  - type: input
+    id: historia
+    attributes:
+      label: Historia relacionada
+      description: Historia o funcionalidad cubierta por esta evidencia.
+      placeholder: "HU-001"
+    validations:
+      required: true
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito relacionado
+      description: RF, RNF o regla cubierta por la evidencia.
+      placeholder: "RF-001"
+    validations:
+      required: true
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Criterio de aceptacion validado
+      description: Criterio que esta evidencia demuestra o bloquea.
+      placeholder: "CA-001 - Resultado observado y condicion validada."
+    validations:
+      required: true
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint
+      description: Sprint FICCT al que corresponde la evidencia.
+      placeholder: "Sprint-1"
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia_esperada
+    attributes:
+      label: Evidencia esperada o entregada
+      description: Pegue enlaces, rutas, comandos ejecutados, capturas o resumen verificable.
+      placeholder: "Ruta: docs/evidencias/sprint-1/HU-001.png. Comando: npm test. Resultado: aprobado."
+    validations:
+      required: true
+  - type: input
+    id: responsable
+    attributes:
+      label: Responsable
+      description: Integrante que registra o valida la evidencia.
+      placeholder: "@usuario-github o Nombre Apellido"
+    validations:
+      required: true
+  - type: textarea
+    id: observaciones
+    attributes:
+      label: Observaciones
+      description: Hallazgos, pendientes, decisiones o acciones de seguimiento.
+      placeholder: "Actualizar matriz de trazabilidad y enlazar PR correspondiente."
+    validations:
+      required: false

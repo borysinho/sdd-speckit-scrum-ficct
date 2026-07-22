@@ -1,0 +1,130 @@
+schema_version: "1.0"
+
+extension:
+  id: ficct
+  name: "GitHub SDD Scrum FICCT"
+  version: "0.1.0"
+  description: "Scrum FICCT, GitHub assets and SDD traceability gates for Spec Kit projects."
+  author: "FICCT"
+  repository: ""
+  license: MIT
+  homepage: ""
+  category: process
+  effect: read-write
+
+requires:
+  speckit_version: ">=0.8.0"
+
+provides:
+  commands:
+    - name: speckit.ficct.init
+      file: commands/ficct-init.md
+      description: "Prepare FICCT SDD/Scrum structure in a Spec Kit project."
+    - name: speckit.ficct.specify
+      file: commands/ficct-specify.md
+      description: "Generate a FICCT SDD feature specification from an inline natural-language prompt."
+    - name: speckit.ficct.plan
+      file: commands/ficct-plan.md
+      description: "Generate a FICCT implementation plan from the specification and an inline prompt."
+    - name: speckit.ficct.tasks
+      file: commands/ficct-tasks.md
+      description: "Generate FICCT implementation tasks from the specification, plan and inline prompt."
+    - name: speckit.ficct.scrum
+      file: commands/ficct-scrum.md
+      description: "Generate or update Scrum F1-F5 artifacts from Spec Kit specs and tasks."
+    - name: speckit.ficct.issues
+      file: commands/ficct-issues.md
+      description: "Prepare GitHub Issues from FICCT stories and tasks."
+    - name: speckit.ficct.implement
+      file: commands/ficct-implement.md
+      description: "Implement a FICCT story or task with tests, evidence and traceability updates."
+    - name: speckit.ficct.pr-check
+      file: commands/ficct-pr-check.md
+      description: "Check a pull request against SDD/Scrum traceability rules."
+    - name: speckit.ficct.report
+      file: commands/ficct-report.md
+      description: "Generate a FICCT SDD/Scrum compliance report."
+  templates:
+    - name: constitution-addendum
+      file: templates/constitution-addendum.md
+      materializes_to: ".specify/memory/constitution.md"
+      description: "FICCT SDD/Scrum addendum for project constitution."
+    - name: spec-template
+      file: templates/spec-template.md
+      materializes_to: "specs/<feature>/spec.md"
+      description: "Feature specification template with SDD and academic traceability fields."
+    - name: plan-template
+      file: templates/plan-template.md
+      materializes_to: "specs/<feature>/plan.md"
+      description: "Implementation plan template aligned with Scrum evidence."
+    - name: tasks-template
+      file: templates/tasks-template.md
+      materializes_to: "specs/<feature>/tasks.md"
+      description: "Task template with acceptance criteria and evidence references."
+    - name: f3-product-backlog-template
+      file: templates/f3-product-backlog-template.md
+      materializes_to: "docs/scrum/f3-product-backlog.md"
+      description: "F3 product backlog template."
+    - name: f4-user-stories-template
+      file: templates/f4-user-stories-template.md
+      materializes_to: "docs/scrum/f4-user-stories.md"
+      description: "F4 user stories template."
+    - name: f5-sprint-backlog-template
+      file: templates/f5-sprint-backlog-template.md
+      materializes_to: "docs/scrum/f5-sprint-backlog.md"
+      description: "F5 sprint backlog template."
+    - name: sprint-review-f1-template
+      file: templates/sprint-review-f1-template.md
+      materializes_to: "docs/scrum/f1-sprint-review.md"
+      description: "F1 sprint review template."
+    - name: retrospective-f2-template
+      file: templates/retrospective-f2-template.md
+      materializes_to: "docs/scrum/f2-retrospective.md"
+      description: "F2 retrospective template."
+    - name: traceability-matrix-template
+      file: templates/traceability-matrix-template.md
+      materializes_to: "docs/sdd/traceability-matrix.md"
+      description: "SDD/Scrum/GitHub traceability matrix template."
+    - name: sdd-compliance-report-template
+      file: templates/sdd-compliance-report-template.md
+      materializes_to: "docs/evidencias/sdd-compliance-report.md"
+      description: "Compliance report template for SDD/Scrum validation."
+
+configuration:
+  template: github-sdd-scrum-ficct-config.template.yml
+  default_config_path: ".specify/extensions/ficct/github-sdd-scrum-ficct-config.yml"
+  defaults:
+    faculty: "FICCT"
+    degree: ""
+    course: ""
+    subject: ""
+    project_name: ""
+    scrum:
+      framework: "scrum-ficct"
+      sprint_prefix: "sprint"
+      require_f1: true
+      require_f2: true
+      require_f3: true
+      require_f4: true
+      require_f5: true
+    github:
+      install_issue_forms: true
+      install_pr_template: true
+      install_workflow: true
+    validation:
+      strict: true
+      require_pr_evidence: true
+      require_tests: true
+    paths:
+      specs: "specs"
+      scrum_docs: "docs/scrum"
+      sdd_docs: "docs/sdd"
+      evidence: "docs/evidencias"
+
+tags:
+  - sdd
+  - scrum
+  - github
+  - ficct
+  - education
+  - spec-kit

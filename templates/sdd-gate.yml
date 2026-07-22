@@ -1,0 +1,132 @@
+name: SDD Gate
+
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  sdd-gate:
+    name: Validar SDD/Scrum FICCT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Localizar extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          for candidate in \
+            ".specify/extensions/ficct" \
+            "github-sdd-scrum-ficct" \
+            ".github/github-sdd-scrum-ficct"
+          do
+            if [ -d "$candidate/templates" ]; then
+              echo "SDD_EXTENSION_DIR=$candidate" >> "$GITHUB_ENV"
+              echo "SDD_EXTENSION_FOUND=true" >> "$GITHUB_ENV"
+              echo "Extension localizada en $candidate"
+              exit 0
+            fi
+          done
+          echo "SDD_EXTENSION_FOUND=false" >> "$GITHUB_ENV"
+          echo "::warning::No se encontro github-sdd-scrum-ficct; se usaran validaciones locales documentadas."
+
+      - name: Verificar plan de assets GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${SDD_EXTENSION_FOUND:-false}" = "true" ] && [ -f "$SDD_EXTENSION_DIR/scripts/install_github_assets.py" ]; then
+            python "$SDD_EXTENSION_DIR/scripts/install_github_assets.py" \
+              --root . \
+              --templates "$SDD_EXTENSION_DIR/templates" \
+              --dry-run
+          else
+            test -f .github/ISSUE_TEMPLATE/feature.yml
+            test -f .github/ISSUE_TEMPLATE/task.yml
+            test -f .github/ISSUE_TEMPLATE/evidence.yml
+            test -f .github/pull_request_template.md
+            test -f .github/workflows/sdd-gate.yml
+            echo "Assets GitHub SDD encontrados en .github/."
+          fi
+
+      - name: Validar estructura SDD/Scrum
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${SDD_EXTENSION_FOUND:-false}" = "true" ] && [ -f "$SDD_EXTENSION_DIR/scripts/validate_structure.py" ]; then
+            python "$SDD_EXTENSION_DIR/scripts/validate_structure.py" --root . --strict
+          else
+            python - <<'PY'
+          from pathlib import Path
+          required = [
+              ".github/ISSUE_TEMPLATE/feature.yml",
+              ".github/ISSUE_TEMPLATE/task.yml",
+              ".github/ISSUE_TEMPLATE/evidence.yml",
+              ".github/pull_request_template.md",
+              ".github/workflows/sdd-gate.yml",
+              "specs",
+              "docs/sdd",
+              "docs/scrum",
+              "docs/evidencias",
+          ]
+          missing = [path for path in required if not Path(path).exists()]
+          if missing:
+              for path in missing:
+                  print(f"::error::Falta estructura requerida: {path}")
+              raise SystemExit(1)
+          print("Estructura SDD/Scrum minima encontrada.")
+          PY
+          fi
+
+      - name: Validar trazabilidad minima
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${SDD_EXTENSION_FOUND:-false}" = "true" ] && [ -f "$SDD_EXTENSION_DIR/scripts/validate_traceability.py" ]; then
+            python "$SDD_EXTENSION_DIR/scripts/validate_traceability.py" --root . --strict
+          else
+            python - <<'PY'
+          import re
+          from pathlib import Path
+
+          roots = [Path("specs"), Path("docs/sdd"), Path("docs/scrum")]
+          text = "\n".join(
+              path.read_text(encoding="utf-8", errors="ignore")
+              for root in roots
+              if root.exists()
+              for path in root.rglob("*.md")
+          )
+          checks = {
+              "requisito RF": r"\bRF-\d{3}\b",
+              "historia HU": r"\bHU-\d{3}\b",
+              "criterio CA": r"\bCA-\d{3}\b",
+              "Sprint": r"\bSprint[- ]?\d+\b",
+          }
+          failed = False
+          for label, pattern in checks.items():
+              if not re.search(pattern, text, flags=re.IGNORECASE):
+                  print(f"::error::No se encontro trazabilidad minima para {label}.")
+                  failed = True
+          pr_template = Path(".github/pull_request_template.md")
+          if pr_template.exists():
+              pr_text = pr_template.read_text(encoding="utf-8", errors="ignore").lower()
+              for required in ["issue", "rf", "hu", "criterios", "pruebas", "evidencia", "decisiones"]:
+                  if required not in pr_text:
+                      print(f"::error::El PR template no exige {required}.")
+                      failed = True
+          if failed:
+              raise SystemExit(1)
+          print("Trazabilidad minima SDD/Scrum encontrada.")
+          PY
+          fi
